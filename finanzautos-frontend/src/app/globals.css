@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+body {
+  @apply bg-neutral-950;
+}

@@ -1,0 +1,18 @@
+{
+  "name": "finanzauto-monorepo",
+  "private": true,
+  "workspaces": [
+    "finanzautos-frontend"
+  ],
+  "scripts": {
+    "start:all": "docker-compose up -d --build",
+    "stop:all": "docker-compose down",
+    "start:frontend": "cd finanzautos-frontend && npm run dev",
+    "start:user": "cd UserMicroservice/UserMicroservice && dotnet run",
+    "start:publication": "cd PublicationMicroservice/PublicationMicroservice && dotnet run",
+    "build:all": "npm run build:frontend && npm run build:user && npm run build:publication",
+    "build:frontend": "cd finanzautos-frontend && npm run build",
+    "build:user": "cd UserMicroservice/UserMicroservice && dotnet build",
+    "build:publication": "cd PublicationMicroservice/PublicationMicroservice && dotnet build"
+  }
+}

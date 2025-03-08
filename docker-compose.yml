@@ -1,0 +1,79 @@
+version: "3.8"
+
+services:
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "johansSwq21321+*"
+      ACCEPT_EULA: "Y"
+      MSSQL_MEMORY_LIMIT_MB: "2048"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+    networks:
+      - finanzauto-network
+    # Eliminamos healthcheck para evitar falsos positivos
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'Waiting for SQL Server initialization...'"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  user-microservice:
+    build:
+      context: ./UserMicroservice
+      dockerfile: Dockerfile
+    environment:
+      - DB_CONNECTION_STRING=Server=sql-server,1433;Database=finanzauto_users;User Id=sa;Password=johansSwq21321+*;Encrypt=False;TrustServerCertificate=True;Connect Timeout=60;ConnectRetryCount=15
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - finanzauto-network
+    depends_on:
+      - sql-server
+    command: ["bash", "-c", "sleep 45 && dotnet UserMicroservice.dll"]
+    restart: unless-stopped
+
+  publication-microservice:
+    build:
+      context: ./PublicationMicroservice
+      dockerfile: Dockerfile
+    environment:
+      - DB_CONNECTION_STRING=Server=sql-server,1433;Database=finanzauto_publications;User Id=sa;Password=johansSwq21321+*;Encrypt=False;TrustServerCertificate=True;Connect Timeout=60;ConnectRetryCount=15
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8082:8080"
+      - "8083:8081"
+    networks:
+      - finanzauto-network
+    depends_on:
+      - sql-server
+    command: ["bash", "-c", "sleep 60 && dotnet PublicationMicroservice.dll"]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./finanzautos-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_USER_MICROSERVICE_URL=http://localhost:8080/api/User
+      - NEXT_PUBLIC_PUBLICATION_MICROSERVICE_URL=http://localhost:8082/api/Publication
+    networks:
+      - finanzauto-network
+    depends_on:
+      - user-microservice
+      - publication-microservice
+    restart: unless-stopped
+
+volumes:
+  sql-data:
+
+networks:
+  finanzauto-network:
+    driver: bridge
