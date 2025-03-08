@@ -64,16 +64,13 @@ function ProfilePage() {
           return;
         }
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_USER_MICROSERVICE_URL}/me`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await fetch(`http://localhost:8080/api/User/me`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!res.ok) {
           if (res.status === 401) {
@@ -126,17 +123,14 @@ function ProfilePage() {
         updateData.password = values.password;
       }
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_USER_MICROSERVICE_URL}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updateData),
-        }
-      );
+      const res = await fetch(`http://localhost:8080/api/User`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updateData),
+      });
 
       if (!res.ok) {
         if (res.status === 401) {

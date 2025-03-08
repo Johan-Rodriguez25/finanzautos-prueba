@@ -71,29 +71,26 @@ function RegisterPage() {
     try {
       setError(null);
       setLoading(true);
-  
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_USER_MICROSERVICE_URL}/register`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            name: values.name,
-            email: values.email,
-            password: values.password,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-  
+
+      const res = await fetch(`http://localhost:8080/api/User/register`, {
+        method: "POST",
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
       let data;
       try {
         data = await res.json();
       } catch {
         data = {};
       }
-  
+
       if (!res.ok) {
         if (res.status === 409) {
           setError("Email already exists");
@@ -103,7 +100,7 @@ function RegisterPage() {
         setLoading(false); // Add this line to reset loading state on error
         return;
       }
-  
+
       router.push("/auth/login");
     } catch (err) {
       console.error("Registration error:", err);

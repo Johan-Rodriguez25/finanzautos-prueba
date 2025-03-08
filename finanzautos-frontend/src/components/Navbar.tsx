@@ -28,16 +28,13 @@ function Navbar() {
       }
 
       // Llamar al endpoint de logout
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_USER_MICROSERVICE_URL}/logout`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`http://localhost:8080/api/User/logout`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!res.ok) {
         if (res.status === 401) {
@@ -81,8 +78,8 @@ function Navbar() {
         </Link>
 
         {/* Botón de menú móvil */}
-        <button 
-          className="md:hidden text-white p-2" 
+        <button
+          className="md:hidden text-white p-2"
           onClick={toggleMenu}
           aria-label="Toggle menu"
         >
@@ -90,18 +87,26 @@ function Navbar() {
         </button>
 
         {/* Menú de navegación */}
-        <ul className={`
+        <ul
+          className={`
           flex flex-col md:flex-row items-center gap-4
-          ${isMenuOpen 
-            ? 'absolute top-16 left-0 right-0 bg-gray-900 p-4 z-50 border-b border-gray-800 shadow-lg' 
-            : 'hidden md:flex'}
-        `}>
+          ${
+            isMenuOpen
+              ? "absolute top-16 left-0 right-0 bg-gray-900 p-4 z-50 border-b border-gray-800 shadow-lg"
+              : "hidden md:flex"
+          }
+        `}
+        >
           {!isLoggedIn ? (
             <>
               <li className="w-full md:w-auto">
-                <Button variant="link" asChild className="w-full md:w-auto justify-center md:justify-start">
-                  <Link 
-                    href="/" 
+                <Button
+                  variant="link"
+                  asChild
+                  className="w-full md:w-auto justify-center md:justify-start"
+                >
+                  <Link
+                    href="/"
                     className="text-white hover:text-gray-300"
                     onClick={closeMenu}
                   >
@@ -110,7 +115,11 @@ function Navbar() {
                 </Button>
               </li>
               <li className="w-full md:w-auto">
-                <Button variant="link" asChild className="w-full md:w-auto justify-center md:justify-start">
+                <Button
+                  variant="link"
+                  asChild
+                  className="w-full md:w-auto justify-center md:justify-start"
+                >
                   <Link
                     href="/auth/login"
                     className="text-white hover:text-gray-300"
@@ -126,10 +135,7 @@ function Navbar() {
                   asChild
                   className="text-white border-white hover:bg-gray-800 w-full md:w-auto"
                 >
-                  <Link 
-                    href="/auth/register"
-                    onClick={closeMenu}
-                  >
+                  <Link href="/auth/register" onClick={closeMenu}>
                     Register
                   </Link>
                 </Button>
@@ -138,7 +144,11 @@ function Navbar() {
           ) : (
             <>
               <li className="w-full md:w-auto">
-                <Button variant="link" asChild className="w-full md:w-auto justify-center md:justify-start">
+                <Button
+                  variant="link"
+                  asChild
+                  className="w-full md:w-auto justify-center md:justify-start"
+                >
                   <Link
                     href="/dashboard"
                     className="text-white hover:text-gray-300"
@@ -149,7 +159,11 @@ function Navbar() {
                 </Button>
               </li>
               <li className="w-full md:w-auto">
-                <Button variant="link" asChild className="w-full md:w-auto justify-center md:justify-start">
+                <Button
+                  variant="link"
+                  asChild
+                  className="w-full md:w-auto justify-center md:justify-start"
+                >
                   <Link
                     href="/dashboard/profile"
                     className="text-white hover:text-gray-300 flex items-center gap-2"

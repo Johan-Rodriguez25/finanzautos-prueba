@@ -75,16 +75,13 @@ export const refreshToken = async (): Promise<boolean> => {
       return false;
     }
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_USER_MICROSERVICE_URL}/refresh`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${currentToken}`,
-        },
-      }
-    );
+    const res = await fetch(`http://localhost:8080/api/User/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${currentToken}`,
+      },
+    });
 
     if (!res.ok) {
       // Si el refresh falla, podríamos redirigir al login

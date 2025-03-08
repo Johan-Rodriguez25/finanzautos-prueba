@@ -50,19 +50,16 @@ function LoginPage() {
       setError(null);
       setLoading(true);
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_USER_MICROSERVICE_URL}/login`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: values.email,
-            password: values.password,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await fetch(`http://localhost:8080/api/User/login`, {
+        method: "POST",
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       let data;
       try {

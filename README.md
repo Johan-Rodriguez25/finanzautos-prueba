@@ -88,11 +88,6 @@ npm run stop:all
 
 ## Environment Variables
 
-### Frontend
-
-- `NEXT_PUBLIC_USER_MICROSERVICE_URL`: URL for the User Microservice
-- `NEXT_PUBLIC_PUBLICATION_MICROSERVICE_URL`: URL for the Publication Microservice
-
 ### Backend
 
 - `DB_CONNECTION_STRING`: Connection string for the SQL Server database
